@@ -1,6 +1,9 @@
 package com.example.milcho.homework2;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -43,21 +46,35 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            Address location = address.get(0);
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            if (!address.isEmpty()) {
+                findLocation(address);
+            } else {
+                openDialog();
+            }
         }
+    }
+
+    public void findLocation(List<Address> address) {
         Address location = address.get(0);
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Marker");
-
         mMap.addMarker(markerOptions);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
-        // mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
-        //  mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
 
+    }
+
+    public void openDialog() {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setMessage("Not found address");
+        dialog.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(MapsActivity.this,DetailsActivity.class));
+            }
+        });
+        dialog.create().show();
     }
 
     @Override
