@@ -16,12 +16,6 @@ import org.w3c.dom.Text;
 public class ResumeActivity extends AppCompatActivity implements View.OnClickListener {
     Button showMapBtn;
     TextView textView;
-    EditText nameET;
-    EditText ageET;
-    EditText addressET;
-    EditText cityET;
-    EditText dateOfBirthET;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,24 +25,21 @@ public class ResumeActivity extends AppCompatActivity implements View.OnClickLis
         showMapBtn = (Button) findViewById(R.id.show_map);
         showMapBtn.setOnClickListener(this);
         textView = (TextView) findViewById(R.id.text_empty);
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout1 = layoutInflater.inflate(R.layout.activity_home, null);
-        View layout2 = layoutInflater.inflate(R.layout.activity_details, null);
-        nameET = (EditText) layout1.findViewById(R.id.name);
-        ageET = (EditText) layout2.findViewById(R.id.age);
-        addressET = (EditText) layout2.findViewById(R.id.address);
-        cityET = (EditText) layout2.findViewById(R.id.city);
-        String text1 = getIntent().getStringExtra("Key5");
+        String text1 = getIntent().getStringExtra("Key1");
         String text2 = getIntent().getStringExtra("Key2");
         String text3 = getIntent().getStringExtra("Key3");
         String text4 = getIntent().getStringExtra("Key4");
-        textView.setText(text1 + ", " + text2 + ", " + text3 + ", " + text4);
+        textView.setText(text1 + ","+"\n" + text2 + ","+"\n" + text3 + ","+"\n" + text4);
 
     }
 
     public void onClick(View v) {
+        String text3 = getIntent().getStringExtra("Key3");
+        String text4 = getIntent().getStringExtra("Key4");
         if (v.getId() == showMapBtn.getId()) {
             Intent in = new Intent(this, MapsActivity.class);
+            in.putExtra("Map1", text3);
+            in.putExtra("Map2", text4);
             startActivity(in);
 
 

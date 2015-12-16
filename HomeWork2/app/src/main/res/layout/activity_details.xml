@@ -61,7 +61,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:hint="Дата на раждане"
-        android:inputType="number"
+        android:inputType="text"
         android:textColor="#FFF70408"
         android:textColorHint="#FFF70408" />
 

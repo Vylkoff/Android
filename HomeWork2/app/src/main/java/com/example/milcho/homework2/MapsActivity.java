@@ -3,14 +3,16 @@ package com.example.milcho.homework2;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -19,23 +21,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity {
+public class MapsActivity extends FragmentActivity implements LocationListener {
 
-    private GoogleMap mMap;
+    GoogleMap mMap;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout2 = layoutInflater.inflate(R.layout.activity_details, null);
-        EditText addressET = (EditText) layout2.findViewById(R.id.address);
-        EditText cityET = (EditText) layout2.findViewById(R.id.city);
-        String text1 = getIntent().getStringExtra("KeyMap1");
-        String text2 = getIntent().getStringExtra("KeyMap2");
+        String text1 = getIntent().getStringExtra("Map1");
+        String text2 = getIntent().getStringExtra("Map2");
         String locationS = text1 + ", " + text2;
-        List<Address>  address = null;
+        List<Address> address = null;
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mMap = mapFragment.getMap();
         if (locationS != null || !locationS.equals("")) {
             Geocoder geocoder = new Geocoder(this);
             try {
@@ -49,52 +49,32 @@ public class MapsActivity extends FragmentActivity {
         }
         Address location = address.get(0);
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        //  setUpMapIfNeeded();
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title("Marker");
+
+        mMap.addMarker(markerOptions);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
+        // mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+        //  mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.0f));
+
     }
 
-/*    @Override
-    protected void onResume() {
-        super.onResume();
-        setUpMapIfNeeded();
-
+    @Override
+    public void onLocationChanged(Location location) {
     }
 
-    private void setUpMapIfNeeded() {
-        if (mMap == null) {
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-        }
-        if (mMap != null) {
-            setUpMap();
-        }
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 
-    private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
-        mMap.setMyLocationEnabled(true);
+    @Override
+    public void onProviderEnabled(String provider) {
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
     }
 
 
-    public void onSearch() {
-        EditText location1 = (EditText) findViewById(R.id.address);
-        String location = location1.getText().toString();
-        List<Address> addressList = null;
-        if (location != null || !location.equals("")) {
-            Geocoder geocoder = new Geocoder(this);
-            try {
-                addressList = geocoder.getFromLocationName(location, 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Address address = addressList.get(0);
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-        }
-        Address address = addressList.get(0);
-        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-
-
-    } */
 }
