@@ -1,7 +1,8 @@
-package com.example.milcho.homework2;
+package com.example.milcho.homework2version2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import org.w3c.dom.Text;
 public class ResumeActivity extends AppCompatActivity implements View.OnClickListener {
     Button showMapBtn;
     TextView textView;
+    String locateAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +32,11 @@ public class ResumeActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void onClick(View v) {
-        String text3 = getIntent().getStringExtra("Key3");
-        String text4 = getIntent().getStringExtra("Key4");
-        Intent in = new Intent(this, MapsActivity.class);
-        in.putExtra("Map1", text3);
-        in.putExtra("Map2", text4);
-        startActivity(in);
+        locateAddress ="geo:0.0?q="+getIntent().getStringExtra("Key3")+" "+getIntent().getStringExtra("Key4");
+        Uri gmmIntentUri=Uri.parse(locateAddress);
+        Intent mapIntent=new Intent(Intent.ACTION_VIEW,gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
     }
 
     private void setText() {
@@ -47,4 +48,3 @@ public class ResumeActivity extends AppCompatActivity implements View.OnClickLis
         textView.setText(text1 + "," + "\n" + text2 + "," + "\n" + text3 + "," + "\n" + text4);
     }
 }
-

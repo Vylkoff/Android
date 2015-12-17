@@ -1,4 +1,4 @@
-package com.example.milcho.homework2;
+package com.example.milcho.homework2version2;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
